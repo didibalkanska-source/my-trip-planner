@@ -1,6 +1,6 @@
 {
-  "name": "My Trip Joy",
-  "short_name": "Trip Joy",
+  "name": "Trip Calendar",
+  "short_name": "Trip Calendar",
   "description": "Планиране на пътувания и отпуски",
   "start_url": "/",
   "scope": "/",
