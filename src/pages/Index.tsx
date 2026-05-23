@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { parseISO, isWithinInterval, startOfYear, endOfYear, startOfToday, isBefore } from "date-fns";
 import { Plane, Plus, LogOut, Wallet, CalendarCheck, TrendingUp, Settings } from "lucide-react";
@@ -27,6 +27,16 @@ export default function Index() {
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<Trip | null>(null);
   const [prefillDate, setPrefillDate] = useState<Date | null>(null);
+  const calRef = useRef<HTMLDivElement>(null);
+  const [calHeight, setCalHeight] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    const el = calRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setCalHeight(el.offsetHeight));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
   const [viewingTrip, setViewingTrip] = useState<Trip | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [daysInput, setDaysInput] = useState("20");
@@ -138,8 +148,8 @@ export default function Index() {
           return (
             <>
               {/* Top: calendar 2/3 + upcoming trips 1/3 */}
-              <section className="grid gap-6 lg:grid-cols-3">
-                <div className="lg:col-span-2 min-w-0">
+              <section className="grid gap-6 lg:grid-cols-3 lg:items-start">
+                <div className="lg:col-span-2 min-w-0" ref={calRef}>
                   <TripsCalendar
                     trips={trips}
                     onTripClick={(t) => { setViewingTrip(t); }}
@@ -147,17 +157,17 @@ export default function Index() {
                   />
                 </div>
 
-                <aside className="space-y-4 min-w-0">
+                <aside className="space-y-4 min-w-0 flex flex-col" style={calHeight ? { height: calHeight } : undefined}>
                   <Button
                     onClick={() => { setEditing(null); setPrefillDate(null); setFormOpen(true); }}
-                    className="w-full gap-2 h-12 text-base shadow-glow"
+                    className="w-full gap-2 h-12 text-base shadow-glow shrink-0"
                     size="lg"
                   >
                     <Plus className="w-5 h-5" /> Ново пътуване
                   </Button>
 
-                  <Card className="p-4 shadow-soft">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-3 uppercase tracking-wide">
+                  <Card className="p-4 shadow-soft flex flex-col flex-1 min-h-0">
+                    <h3 className="text-sm font-medium text-muted-foreground mb-3 uppercase tracking-wide shrink-0">
                       Предстоящи ({upcoming.length})
                     </h3>
                     {upcoming.length === 0 ? (
@@ -166,7 +176,7 @@ export default function Index() {
                         <p className="text-sm text-muted-foreground">Няма предстоящи пътувания.</p>
                       </div>
                     ) : (
-                      <div className="space-y-3 max-h-[520px] overflow-y-auto pr-1">
+                      <div className="space-y-3 overflow-y-auto pr-1 flex-1 min-h-0">
                         {upcoming.map((t) => (
                           <TripCard key={t.id} trip={t} onClick={() => setViewingTrip(t)} />
                         ))}
