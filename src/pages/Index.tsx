@@ -36,7 +36,7 @@ export default function Index() {
   }, [authLoading, user, navigate]);
 
   useEffect(() => {
-    document.title = "Моите пътувания · Календар и отпуска";
+    document.title = "Trip Calendar";
   }, []);
 
   const loadAll = async () => {
