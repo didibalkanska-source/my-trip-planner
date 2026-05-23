@@ -1,0 +1,1 @@
+ALTER TABLE public.trips ADD COLUMN departs_after_work boolean NOT NULL DEFAULT false;
