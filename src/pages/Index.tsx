@@ -159,7 +159,7 @@ export default function Index() {
                   />
                 </div>
 
-                <aside className="space-y-4 min-w-0 flex flex-col" style={calHeight ? { height: calHeight } : undefined}>
+                <aside className="min-w-0 flex flex-col gap-4 lg:sticky lg:top-6" style={calHeight ? { maxHeight: calHeight } : undefined}>
                   <Button
                     onClick={() => { setEditing(null); setPrefillDate(null); setFormOpen(true); }}
                     className="w-full gap-2 h-12 text-base shadow-glow shrink-0"
