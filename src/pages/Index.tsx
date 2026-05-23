@@ -148,7 +148,7 @@ export default function Index() {
           return (
             <>
               {/* Top: calendar 2/3 + upcoming trips 1/3 */}
-              <section className="grid gap-6 lg:grid-cols-3 lg:items-start">
+              <section className="grid gap-6 lg:grid-cols-3 lg:items-stretch">
                 <div className="lg:col-span-2 min-w-0" ref={calRef}>
                   <TripsCalendar
                     trips={trips}
@@ -159,33 +159,35 @@ export default function Index() {
                   />
                 </div>
 
-                <aside className="min-w-0 flex flex-col gap-4 lg:sticky lg:top-6" style={calHeight ? { maxHeight: calHeight } : undefined}>
-                  <Button
-                    onClick={() => { setEditing(null); setPrefillDate(null); setFormOpen(true); }}
-                    className="w-full gap-2 h-12 text-base shadow-glow shrink-0"
-                    size="lg"
-                  >
-                    <Plus className="w-5 h-5" /> Ново пътуване
-                  </Button>
+                <div className="min-w-0 relative">
+                  <aside className="lg:absolute lg:inset-0 flex flex-col gap-4">
+                    <Button
+                      onClick={() => { setEditing(null); setPrefillDate(null); setFormOpen(true); }}
+                      className="w-full gap-2 h-12 text-base shadow-glow shrink-0"
+                      size="lg"
+                    >
+                      <Plus className="w-5 h-5" /> Ново пътуване
+                    </Button>
 
-                  <Card className="p-4 shadow-soft flex flex-col flex-1 min-h-0">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-3 uppercase tracking-wide shrink-0">
-                      Предстоящи ({upcoming.length})
-                    </h3>
-                    {upcoming.length === 0 ? (
-                      <div className="text-center py-6">
-                        <Plane className="w-8 h-8 mx-auto text-muted-foreground mb-2" />
-                        <p className="text-sm text-muted-foreground">Няма предстоящи пътувания.</p>
-                      </div>
-                    ) : (
-                      <div className="space-y-3 overflow-y-auto pr-1 flex-1 min-h-0">
-                        {upcoming.map((t) => (
-                          <TripCard key={t.id} trip={t} onClick={() => setViewingTrip(t)} />
-                        ))}
-                      </div>
-                    )}
-                  </Card>
-                </aside>
+                    <Card className="p-4 shadow-soft flex flex-col flex-1 min-h-0">
+                      <h3 className="text-sm font-medium text-muted-foreground mb-3 uppercase tracking-wide shrink-0">
+                        Предстоящи ({upcoming.length})
+                      </h3>
+                      {upcoming.length === 0 ? (
+                        <div className="text-center py-6">
+                          <Plane className="w-8 h-8 mx-auto text-muted-foreground mb-2" />
+                          <p className="text-sm text-muted-foreground">Няма предстоящи пътувания.</p>
+                        </div>
+                      ) : (
+                        <div className="space-y-3 overflow-y-auto pr-1 flex-1 min-h-0">
+                          {upcoming.map((t) => (
+                            <TripCard key={t.id} trip={t} onClick={() => setViewingTrip(t)} />
+                          ))}
+                        </div>
+                      )}
+                    </Card>
+                  </aside>
+                </div>
               </section>
 
               {/* Stats */}

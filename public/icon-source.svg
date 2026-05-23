@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1fb8c4"/>
+      <stop offset="100%" style="stop-color:#0d7a85"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="110" ry="110" fill="url(#bg)"/>
+
+  <!-- Calendar body -->
+  <rect x="32" y="80" width="448" height="400" rx="36" fill="white"/>
+
+  <!-- Calendar header -->
+  <rect x="32" y="80" width="448" height="116" rx="36" fill="#0d9aa8"/>
+  <rect x="32" y="160" width="448" height="36" fill="#0d9aa8"/>
+
+  <!-- Rings -->
+  <rect x="148" y="44" width="28" height="72" rx="14" fill="white"/>
+  <rect x="336" y="44" width="28" height="72" rx="14" fill="white"/>
+
+  <!-- Row 1 — y=220 -->
+  <rect x="56"  y="220" width="52" height="16" rx="8" fill="#b2dde2"/>
+  <rect x="130" y="220" width="52" height="16" rx="8" fill="#b2dde2"/>
+  <rect x="204" y="220" width="52" height="16" rx="8" fill="#b2dde2"/>
+  <rect x="278" y="220" width="52" height="16" rx="8" fill="#b2dde2"/>
+  <rect x="352" y="220" width="52" height="16" rx="8" fill="#b2dde2"/>
+  <rect x="426" y="220" width="30" height="16" rx="8" fill="#b2dde2"/>
+
+  <!-- Row 2 — y=270 -->
+  <rect x="56"  y="270" width="52" height="16" rx="8" fill="#b2dde2"/>
+  <rect x="130" y="270" width="52" height="16" rx="8" fill="#b2dde2"/>
+  <rect x="204" y="270" width="52" height="16" rx="8" fill="#b2dde2"/>
+  <rect x="278" y="270" width="52" height="16" rx="8" fill="#b2dde2"/>
+  <rect x="352" y="270" width="52" height="16" rx="8" fill="#b2dde2"/>
+  <rect x="426" y="270" width="30" height="16" rx="8" fill="#b2dde2"/>
+
+  <!-- Row 3 — y=320 -->
+  <rect x="56"  y="320" width="52" height="16" rx="8" fill="#b2dde2"/>
+  <rect x="130" y="320" width="52" height="16" rx="8" fill="#b2dde2"/>
+  <rect x="204" y="320" width="52" height="16" rx="8" fill="#b2dde2"/>
+  <rect x="278" y="320" width="52" height="16" rx="8" fill="#b2dde2"/>
+  <rect x="352" y="320" width="52" height="16" rx="8" fill="#b2dde2"/>
+  <rect x="426" y="320" width="30" height="16" rx="8" fill="#b2dde2"/>
+
+  <!-- Row 4 — y=370 -->
+  <rect x="56"  y="370" width="52" height="16" rx="8" fill="#b2dde2"/>
+  <rect x="130" y="370" width="52" height="16" rx="8" fill="#b2dde2"/>
+  <rect x="204" y="370" width="52" height="16" rx="8" fill="#b2dde2"/>
+  <rect x="278" y="370" width="52" height="16" rx="8" fill="#b2dde2"/>
+  <rect x="352" y="370" width="52" height="16" rx="8" fill="#b2dde2"/>
+
+  <!-- Colored trip bars -->
+  <rect x="204" y="220" width="126" height="16" rx="8" fill="#f97316"/>
+  <rect x="278" y="270" width="126" height="16" rx="8" fill="#a855f7"/>
+  <rect x="56"  y="320" width="200" height="16" rx="8" fill="#f97316"/>
+  <rect x="130" y="370" width="200" height="16" rx="8" fill="#0d9aa8"/>
+
+  <!-- Airplane — 2x bigger, orange, top-down, on header -->
+  <g transform="translate(300, 138) rotate(-38) scale(2)">
+    <rect x="-13" y="-52" width="26" height="104" rx="13" fill="#f97316"/>
+    <polygon points="-13,-6 -82,38 -82,58 -13,26" fill="#f97316"/>
+    <polygon points="13,-6 82,38 82,58 13,26" fill="#f97316"/>
+    <polygon points="-13,38 -42,64 -42,76 -13,52" fill="#f97316"/>
+    <polygon points="13,38 42,64 42,76 13,52" fill="#f97316"/>
+  </g>
+
+</svg>
