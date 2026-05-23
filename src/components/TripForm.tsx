@@ -140,6 +140,7 @@ export function TripForm({
   onDelete?: () => void;
 }) {
   const [destination, setDestination] = useState("");
+  const [inputReady, setInputReady] = useState(false);
   const [transport, setTransport] = useState("Кола");
   const [airline, setAirline] = useState("WizzAir");
   const [range, setRange] = useState<DateRange | undefined>({ from: new Date(), to: new Date() });
@@ -206,6 +207,14 @@ export function TripForm({
       setNotes("");
     }
   }, [trip, open, prefillDate]);
+
+  useEffect(() => {
+    if (open) {
+      setInputReady(false);
+      const t = setTimeout(() => setInputReady(true), 300);
+      return () => clearTimeout(t);
+    }
+  }, [open]);
 
   // If landing is before flight, clear it
   useEffect(() => {
@@ -300,6 +309,7 @@ export function TripForm({
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
               placeholder={category === "Друго" ? "напр. Концерт" : "напр. Барселона"}
+              readOnly={!inputReady}
             />
           </div>
 
