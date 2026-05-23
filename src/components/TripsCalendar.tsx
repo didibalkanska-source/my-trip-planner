@@ -1,15 +1,16 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { format, parseISO } from "date-fns";
 import { bg } from "date-fns/locale";
 import { Calendar } from "@/components/ui/calendar";
 import { Card } from "@/components/ui/card";
-import { Plane, Car, Train, Bus, Sailboat, Compass } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Plane, Car, Train, Bus, Sailboat, Compass, Bike, Plus } from "lucide-react";
 import type { Trip } from "./TripForm";
 import { holidayName } from "@/lib/holidays";
 import { cn } from "@/lib/utils";
 
 const icons: Record<string, any> = {
-  "Самолет": Plane, "Кола": Car, "Влак": Train, "Автобус": Bus, "Яхта": Sailboat, "Друго": Compass,
+  "Самолет": Plane, "Кола": Car, "Влак": Train, "Автобус": Bus, "Яхта": Sailboat, "Колело": Bike, "Друго": Compass,
 };
 
 // Stable color per destination
@@ -52,6 +53,10 @@ export function TripsCalendar({
   onTripClick?: (trip: Trip) => void;
   onEmptyDayClick?: (date: Date) => void;
 }) {
+  const [pickDialogTrips, setPickDialogTrips] = useState<Trip[]>([]);
+  const [pickDialogOpen, setPickDialogOpen] = useState(false);
+  const [pickDialogDate, setPickDialogDate] = useState<Date | undefined>(undefined);
+
   const tripPriority = (t: Trip) => (t.is_event ? 1 : t.kid ? 2 : 0);
 
   const byDate = useMemo(() => {
@@ -94,10 +99,12 @@ export function TripsCalendar({
     if (!date) return;
     const key = format(date, "yyyy-MM-dd");
     const dayTrips = byDate.get(key) ?? [];
-    if (dayTrips.length > 0) {
-      onTripClick?.(dayTrips[0]);
-    } else {
+    if (dayTrips.length === 0) {
       onEmptyDayClick?.(date);
+    } else {
+      setPickDialogTrips(dayTrips);
+      setPickDialogDate(date);
+      setPickDialogOpen(true);
     }
   };
 
@@ -167,7 +174,7 @@ export function TripsCalendar({
                     </div>
                     {/* Desktop: pills */}
                     <div className="hidden sm:flex flex-col gap-0.5 w-full min-w-0 mt-1">
-                      {dayTrips.slice(0, 2).map((t, i) => {
+                      {dayTrips.slice(0, 4).map((t, i) => {
                         const Icon = icons[t.transport] ?? Compass;
                         return (
                           <div
@@ -181,8 +188,8 @@ export function TripsCalendar({
                           </div>
                         );
                       })}
-                      {dayTrips.length > 2 && (
-                        <span className="text-[9px] text-muted-foreground">+{dayTrips.length - 2}</span>
+                      {dayTrips.length > 4 && (
+                        <span className="text-[9px] text-muted-foreground">+{dayTrips.length - 4}</span>
                       )}
                     </div>
                   </>
@@ -213,6 +220,43 @@ export function TripsCalendar({
 
         </div>
       )}
+
+      <Dialog open={pickDialogOpen} onOpenChange={setPickDialogOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Избери пътуване</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col gap-2">
+            {pickDialogTrips.map((t) => {
+              const Icon = icons[t.transport] ?? Compass;
+              return (
+                <button
+                  key={t.id}
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-white text-left"
+                  style={{ backgroundColor: tripColor(t) }}
+                  onClick={() => {
+                    setPickDialogOpen(false);
+                    onTripClick?.(t);
+                  }}
+                >
+                  <Icon className="w-4 h-4 shrink-0" />
+                  <span>{t.destination}</span>
+                </button>
+              );
+            })}
+            <button
+              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium border border-dashed border-muted-foreground/50 text-muted-foreground hover:bg-muted/50 transition-colors"
+              onClick={() => {
+                setPickDialogOpen(false);
+                onEmptyDayClick?.(pickDialogDate!);
+              }}
+            >
+              <Plus className="w-4 h-4 shrink-0" />
+              <span>Добави ново</span>
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 }

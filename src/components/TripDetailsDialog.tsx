@@ -1,6 +1,6 @@
 import { format, parseISO } from "date-fns";
 import { bg } from "date-fns/locale";
-import { MapPin, Plane, Car, Train, Bus, Sailboat, Compass, Pencil, Trash2, Wallet, CalendarDays, Clock, Check, BedDouble, Package, CalendarCheck } from "lucide-react";
+import { MapPin, Plane, Car, Train, Bus, Sailboat, Compass, Pencil, Trash2, Wallet, CalendarDays, Clock, Check, BedDouble, Package, CalendarCheck, Bike } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,7 +8,7 @@ import type { Trip } from "./TripForm";
 import { totalDays, workdaysBetween } from "@/lib/vacation";
 
 const icons: Record<string, any> = {
-  "Самолет": Plane, "Кола": Car, "Влак": Train, "Автобус": Bus, "Яхта": Sailboat, "Друго": Compass,
+  "Самолет": Plane, "Кола": Car, "Влак": Train, "Автобус": Bus, "Яхта": Sailboat, "Колело": Bike, "Друго": Compass,
 };
 
 export function TripDetailsDialog({

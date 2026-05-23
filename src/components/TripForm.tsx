@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { z } from "zod";
 import { format, isSameDay } from "date-fns";
-import { CalendarIcon, Clock } from "lucide-react";
+import { CalendarIcon, Clock, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -129,7 +129,7 @@ function DateTimePicker({
 }
 
 export function TripForm({
-  open, onOpenChange, userId, trip, prefillDate, onSaved,
+  open, onOpenChange, userId, trip, prefillDate, onSaved, onDelete,
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
@@ -137,6 +137,7 @@ export function TripForm({
   trip?: Trip | null;
   prefillDate?: Date | null;
   onSaved: () => void;
+  onDelete?: () => void;
 }) {
   const [destination, setDestination] = useState("");
   const [transport, setTransport] = useState("Кола");
@@ -482,8 +483,19 @@ export function TripForm({
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>Отказ</Button>
-          <Button onClick={save} disabled={saving}>Запази</Button>
+          <div className="flex justify-between w-full">
+            <div>
+              {trip && onDelete && (
+                <Button variant="destructive" onClick={onDelete} disabled={saving} size="icon">
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              )}
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => onOpenChange(false)}>Отказ</Button>
+              <Button onClick={save} disabled={saving}>Запази</Button>
+            </div>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

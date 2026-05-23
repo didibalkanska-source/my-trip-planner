@@ -142,7 +142,7 @@ export default function Index() {
                 <div className="lg:col-span-2 min-w-0">
                   <TripsCalendar
                     trips={trips}
-                    onTripClick={(t) => setViewingTrip(t)}
+                    onTripClick={(t) => { setEditing(t); setPrefillDate(null); setFormOpen(true); }}
                     onEmptyDayClick={(d) => { setEditing(null); setPrefillDate(d); setFormOpen(true); }}
                   />
                 </div>
@@ -240,6 +240,7 @@ export default function Index() {
         trip={editing}
         prefillDate={prefillDate}
         onSaved={loadAll}
+        onDelete={editing ? async () => { await remove(editing.id); setFormOpen(false); setEditing(null); } : undefined}
       />
 
       <TripDetailsDialog

@@ -1,10 +1,10 @@
 import { format, parseISO } from "date-fns";
-import { Plane, Car, Train, Bus, Sailboat, Compass } from "lucide-react";
+import { Plane, Car, Train, Bus, Sailboat, Compass, Bike } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import type { Trip } from "./TripForm";
 
 const icons: Record<string, any> = {
-  "Самолет": Plane, "Кола": Car, "Влак": Train, "Автобус": Bus, "Яхта": Sailboat, "Друго": Compass,
+  "Самолет": Plane, "Кола": Car, "Влак": Train, "Автобус": Bus, "Яхта": Sailboat, "Колело": Bike, "Друго": Compass,
 };
 
 const transportBg: Record<string, string> = {
@@ -13,6 +13,7 @@ const transportBg: Record<string, string> = {
   "Влак": "bg-amber-700",
   "Автобус": "bg-rose-500",
   "Яхта": "bg-teal-500",
+  "Колело": "bg-green-500",
   "Друго": "bg-violet-500",
 };
 
