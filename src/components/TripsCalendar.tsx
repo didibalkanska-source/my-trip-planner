@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef } from "react";
 import { format, parseISO } from "date-fns";
 import { bg } from "date-fns/locale";
 import { Calendar } from "@/components/ui/calendar";
@@ -56,6 +56,24 @@ export function TripsCalendar({
   const [pickDialogTrips, setPickDialogTrips] = useState<Trip[]>([]);
   const [pickDialogOpen, setPickDialogOpen] = useState(false);
   const [pickDialogDate, setPickDialogDate] = useState<Date | undefined>(undefined);
+  const [month, setMonth] = useState<Date>(new Date());
+  const touchStartX = useRef<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(dx) > 50) {
+      setMonth((m) => {
+        const next = new Date(m);
+        next.setMonth(next.getMonth() + (dx < 0 ? 1 : -1));
+        return next;
+      });
+    }
+    touchStartX.current = null;
+  };
 
   const tripPriority = (t: Trip) => (t.is_event ? 1 : t.kid ? 2 : 0);
 
@@ -114,10 +132,13 @@ export function TripsCalendar({
         <h2 className="text-base sm:text-lg font-semibold">Календар на пътуванията</h2>
       </div>
 
+      <div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <Calendar
         mode="single"
         selected={undefined}
         onSelect={handleSelect}
+        month={month}
+        onMonthChange={setMonth}
         weekStartsOn={1}
         locale={bg}
         showOutsideDays
@@ -199,6 +220,7 @@ export function TripsCalendar({
           },
         }}
       />
+      </div>
 
 
       {upcomingTrips.length > 0 && (
@@ -207,14 +229,15 @@ export function TripsCalendar({
             const TransportIcon = icons[t.transport] ?? Compass;
             const label = t.kid ?? t.destination;
             return (
-              <div
+              <button
                 key={t.id}
-                className="flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium text-white"
+                className="flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium text-white cursor-pointer"
                 style={{ backgroundColor: tripColor(t) }}
+                onClick={() => onTripClick?.(t)}
               >
                 <TransportIcon className="w-3 h-3" />
                 {label}{t.kid ? ` · ${t.destination}` : ""}
-              </div>
+              </button>
             );
           })}
 

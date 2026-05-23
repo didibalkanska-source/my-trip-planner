@@ -142,7 +142,7 @@ export default function Index() {
                 <div className="lg:col-span-2 min-w-0">
                   <TripsCalendar
                     trips={trips}
-                    onTripClick={(t) => { setEditing(t); setPrefillDate(null); setFormOpen(true); }}
+                    onTripClick={(t) => { setViewingTrip(t); }}
                     onEmptyDayClick={(d) => { setEditing(null); setPrefillDate(d); setFormOpen(true); }}
                   />
                 </div>
