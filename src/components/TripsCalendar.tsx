@@ -4,10 +4,13 @@ import { bg } from "date-fns/locale";
 import { Calendar } from "@/components/ui/calendar";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Plane, Car, Train, Bus, Sailboat, Compass, Bike, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Plane, Car, Train, Bus, Sailboat, Compass, Bike, Plus, Pencil, Trash2, Wallet, CalendarDays, MapPin, Check, BedDouble, Package, CalendarCheck, Clock } from "lucide-react";
 import type { Trip } from "./TripForm";
 import { holidayName } from "@/lib/holidays";
 import { cn } from "@/lib/utils";
+import { totalDays, workdaysBetween } from "@/lib/vacation";
 
 const icons: Record<string, any> = {
   "Самолет": Plane, "Кола": Car, "Влак": Train, "Автобус": Bus, "Яхта": Sailboat, "Колело": Bike, "Друго": Compass,
@@ -48,10 +51,14 @@ export function TripsCalendar({
   trips,
   onTripClick,
   onEmptyDayClick,
+  onEditTrip,
+  onDeleteTrip,
 }: {
   trips: Trip[];
-  onTripClick?: (trip: Trip) => void;
+  onTripClick?: (trip: Trip, date?: Date) => void;
   onEmptyDayClick?: (date: Date) => void;
+  onEditTrip?: (trip: Trip) => void;
+  onDeleteTrip?: (trip: Trip) => void;
 }) {
   const [pickDialogTrips, setPickDialogTrips] = useState<Trip[]>([]);
   const [pickDialogOpen, setPickDialogOpen] = useState(false);
@@ -245,38 +252,82 @@ export function TripsCalendar({
       )}
 
       <Dialog open={pickDialogOpen} onOpenChange={setPickDialogOpen}>
-        <DialogContent className="max-w-sm">
+        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Избери пътуване</DialogTitle>
+            <DialogTitle className="flex items-center justify-between">
+              <Button
+                variant="outline"
+                className="gap-2 w-full"
+                onClick={() => { setPickDialogOpen(false); onEmptyDayClick?.(pickDialogDate!); }}
+              >
+                <Plus className="w-4 h-4" /> Добави ново
+              </Button>
+            </DialogTitle>
           </DialogHeader>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-4">
             {pickDialogTrips.map((t) => {
               const Icon = icons[t.transport] ?? Compass;
+              const days = totalDays(t.start_date, t.end_date);
+              const wd = t.uses_vacation ? workdaysBetween(t.start_date, t.end_date, { skipFirstDay: t.departs_after_work }) : 0;
+              const over = t.actual_budget > t.planned_budget && t.planned_budget > 0;
               return (
-                <button
-                  key={t.id}
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-white text-left"
-                  style={{ backgroundColor: tripColor(t) }}
-                  onClick={() => {
-                    setPickDialogOpen(false);
-                    onTripClick?.(t);
-                  }}
-                >
-                  <Icon className="w-4 h-4 shrink-0" />
-                  <span>{t.destination}</span>
-                </button>
+                <div key={t.id} className="rounded-xl border overflow-hidden">
+                  {/* Header */}
+                  <div className="flex items-center gap-3 px-4 py-3" style={{ backgroundColor: tripColor(t) + "22" }}>
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: tripColor(t) }}>
+                      <Icon className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="font-semibold text-sm">{t.destination}</span>
+                  </div>
+                  {/* Info */}
+                  <div className="px-4 py-3 space-y-2 text-sm">
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <CalendarDays className="w-4 h-4 shrink-0" />
+                      {format(parseISO(t.start_date), "d MMM yyyy", { locale: bg })} – {format(parseISO(t.end_date), "d MMM yyyy", { locale: bg })}
+                      <span className="text-xs">· {days} дни</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <MapPin className="w-4 h-4 shrink-0" /> {t.transport}
+                      {t.airline && t.transport === "Самолет" && <span>· {t.airline}</span>}
+                    </div>
+                    {t.flight_time && (
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Clock className="w-4 h-4 shrink-0" />
+                        Излитане: {format(new Date(t.flight_time), "dd MMM, HH:mm", { locale: bg })}
+                      </div>
+                    )}
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      <Badge variant="secondary" className="gap-1">
+                        <Wallet className="w-3 h-3" />
+                        {t.actual_budget.toFixed(0)} / {t.planned_budget.toFixed(0)} €
+                      </Badge>
+                      {t.has_flight_booking && <Badge variant="outline" className="gap-1"><Check className="w-3 h-3" />Полет{t.flight_cost > 0 ? ` · ${t.flight_cost.toFixed(0)} €` : ""}</Badge>}
+                      {t.has_accommodation && <Badge variant="outline" className="gap-1"><BedDouble className="w-3 h-3" />Спане{t.accommodation_cost > 0 ? ` · ${t.accommodation_cost.toFixed(0)} €` : ""}</Badge>}
+                      {t.has_car_rental && <Badge variant="outline" className="gap-1"><Car className="w-3 h-3" />Кола{t.car_cost > 0 ? ` · ${t.car_cost.toFixed(0)} €` : ""}</Badge>}
+                      {t.has_other_booking && <Badge variant="outline" className="gap-1"><Package className="w-3 h-3" />Друго{t.other_cost > 0 ? ` · ${t.other_cost.toFixed(0)} €` : ""}</Badge>}
+                      {t.uses_vacation && wd > 0 && <Badge className="bg-accent text-accent-foreground hover:bg-accent">{wd} раб. дни отпуска</Badge>}
+                      {t.uses_vacation && (
+                        <Badge variant={t.vacation_requested ? "default" : "outline"} className="gap-1">
+                          <CalendarCheck className="w-3 h-3" />
+                          {t.vacation_requested ? "Отпуска заявена" : "Отпуска незаявена"}
+                        </Badge>
+                      )}
+                      {over && <Badge variant="destructive">Над бюджет</Badge>}
+                    </div>
+                    {t.notes && <p className="text-xs text-muted-foreground pt-1 border-t whitespace-pre-wrap">{t.notes}</p>}
+                  </div>
+                  {/* Actions */}
+                  <div className="flex gap-2 px-4 pb-3">
+                    <Button variant="outline" size="sm" className="gap-1.5" onClick={() => { setPickDialogOpen(false); onDeleteTrip?.(t); }}>
+                      <Trash2 className="w-3.5 h-3.5 text-destructive" /> Изтрий
+                    </Button>
+                    <Button size="sm" className="gap-1.5 ml-auto" onClick={() => { setPickDialogOpen(false); onEditTrip?.(t); }}>
+                      <Pencil className="w-3.5 h-3.5" /> Редактирай
+                    </Button>
+                  </div>
+                </div>
               );
             })}
-            <button
-              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium border border-dashed border-muted-foreground/50 text-muted-foreground hover:bg-muted/50 transition-colors"
-              onClick={() => {
-                setPickDialogOpen(false);
-                onEmptyDayClick?.(pickDialogDate!);
-              }}
-            >
-              <Plus className="w-4 h-4 shrink-0" />
-              <span>Добави ново</span>
-            </button>
           </div>
         </DialogContent>
       </Dialog>

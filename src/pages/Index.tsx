@@ -152,8 +152,10 @@ export default function Index() {
                 <div className="lg:col-span-2 min-w-0" ref={calRef}>
                   <TripsCalendar
                     trips={trips}
-                    onTripClick={(t) => { setViewingTrip(t); }}
+                    onTripClick={(t, date) => { setViewingTrip(t); setPrefillDate(date ?? null); }}
                     onEmptyDayClick={(d) => { setEditing(null); setPrefillDate(d); setFormOpen(true); }}
+                    onEditTrip={(t) => { setEditing(t); setPrefillDate(null); setFormOpen(true); }}
+                    onDeleteTrip={async (t) => { await remove(t.id); }}
                   />
                 </div>
 
