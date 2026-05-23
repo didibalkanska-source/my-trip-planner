@@ -45,7 +45,7 @@ export type Trip = {
   notes: string | null;
 };
 
-const transports = ["Самолет", "Кола", "Влак", "Автобус", "Яхта", "Друго"];
+const transports = ["Самолет", "Кола", "Автобус", "Яхта", "Колело", "Друго"];
 const airlines = ["WizzAir", "Ryanair", "Other"];
 const kids = ["Теди", "Мими"];
 
