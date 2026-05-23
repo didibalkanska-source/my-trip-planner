@@ -286,6 +286,8 @@ export function TripForm({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+        {/* Absorbs initial focus so mobile keyboard doesn't pop on open */}
+        <span tabIndex={0} className="sr-only" aria-hidden="true" />
         <DialogHeader>
           <DialogTitle>
             {category === "Друго"
