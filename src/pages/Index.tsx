@@ -204,13 +204,13 @@ export default function Index() {
                   <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
                     <Wallet className="w-4 h-4" /> Похарчен бюджет
                   </div>
-                  <div className="text-3xl font-bold">{spentTotal.toFixed(0)} <span className="text-base font-normal text-muted-foreground">лв</span></div>
+                  <div className="text-3xl font-bold">{spentTotal.toFixed(0)} <span className="text-base font-normal text-muted-foreground">€</span></div>
                 </Card>
                 <Card className="p-5 shadow-soft">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
                     <TrendingUp className="w-4 h-4" /> Предвиден бюджет
                   </div>
-                  <div className="text-3xl font-bold">{plannedTotal.toFixed(0)} <span className="text-base font-normal text-muted-foreground">лв</span></div>
+                  <div className="text-3xl font-bold">{plannedTotal.toFixed(0)} <span className="text-base font-normal text-muted-foreground">€</span></div>
                 </Card>
               </section>
 

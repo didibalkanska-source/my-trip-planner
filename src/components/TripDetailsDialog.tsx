@@ -64,19 +64,19 @@ export function TripDetailsDialog({
           <div className="flex flex-wrap gap-2 pt-1">
             <Badge variant="secondary" className="gap-1">
               <Wallet className="w-3 h-3" />
-              {trip.actual_budget.toFixed(0)} / {trip.planned_budget.toFixed(0)} лв
+              {trip.actual_budget.toFixed(0)} / {trip.planned_budget.toFixed(0)} €
             </Badge>
             {trip.has_flight_booking && (
-              <Badge variant="outline" className="gap-1"><Check className="w-3 h-3" />Полет{trip.flight_cost > 0 ? ` · ${trip.flight_cost.toFixed(0)} лв` : ""}</Badge>
+              <Badge variant="outline" className="gap-1"><Check className="w-3 h-3" />Полет{trip.flight_cost > 0 ? ` · ${trip.flight_cost.toFixed(0)} €` : ""}</Badge>
             )}
             {trip.has_accommodation && (
-              <Badge variant="outline" className="gap-1"><BedDouble className="w-3 h-3" />Спане{trip.accommodation_cost > 0 ? ` · ${trip.accommodation_cost.toFixed(0)} лв` : ""}</Badge>
+              <Badge variant="outline" className="gap-1"><BedDouble className="w-3 h-3" />Спане{trip.accommodation_cost > 0 ? ` · ${trip.accommodation_cost.toFixed(0)} €` : ""}</Badge>
             )}
             {trip.has_car_rental && (
-              <Badge variant="outline" className="gap-1"><Car className="w-3 h-3" />Кола{trip.car_cost > 0 ? ` · ${trip.car_cost.toFixed(0)} лв` : ""}</Badge>
+              <Badge variant="outline" className="gap-1"><Car className="w-3 h-3" />Кола{trip.car_cost > 0 ? ` · ${trip.car_cost.toFixed(0)} €` : ""}</Badge>
             )}
             {trip.has_other_booking && (
-              <Badge variant="outline" className="gap-1"><Package className="w-3 h-3" />Друго{trip.other_cost > 0 ? ` · ${trip.other_cost.toFixed(0)} лв` : ""}</Badge>
+              <Badge variant="outline" className="gap-1"><Package className="w-3 h-3" />Друго{trip.other_cost > 0 ? ` · ${trip.other_cost.toFixed(0)} €` : ""}</Badge>
             )}
             {trip.uses_vacation && wd > 0 && (
               <Badge className="bg-accent text-accent-foreground hover:bg-accent">{wd} раб. дни отпуска</Badge>

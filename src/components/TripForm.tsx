@@ -443,7 +443,7 @@ export function TripForm({
                     onChange={(e) => r.setCost(e.target.value)}
                     disabled={!r.checked}
                     className="w-28"
-                    placeholder="лв"
+                    placeholder="€"
                   />
                 </div>
               ))}
